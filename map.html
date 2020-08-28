@@ -1,0 +1,198 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="map.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Map</title>
+        <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx33cc91c829da4cc8a2b881aa60a9b68c"></script>
+        <script src="https://apis.openapi.sk.com/tmap/js?version=1&format=javascript&appKey=l7xx33cc91c829da4cc8a2b881aa60a9b68c"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+        <script>
+           
+            function initTmap(){
+                var map = new Tmapv2.Map("map_div", {
+                    center: new Tmapv2.LatLng(35.180883,126.925123),
+                    width: "100%",
+                    height: "600px"
+                });
+                map.setZoom(15);
+            
+                // 2. 시작, 도착 심볼찍기
+            
+                // 시작
+                addMarker("llStart",126.925123,35.180883,1);
+                // 도착
+                addMarker("llEnd", 126.933204,35.182225);
+                console.log("pickpick");
+                function addMarker(status, lon, lat, tag) {
+                    //출도착경유구분
+                    //이미지 파일 변경.
+                                       
+                    switch (status) {
+                        case "llStart":
+                            imgURL = 'http://tmapapis.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
+                            break;
+                        case "llPass":
+                            imgURL = 'http://tmapapis.sktelecom.com/upload/tmap/marker/pin_b_m_p.png';
+                            break;
+                        case "llEnd":
+                            imgURL = 'http://tmapapis.sktelecom.com/upload/tmap/marker/pin_r_m_e.png';
+                            break;
+                        default:
+                    };
+                    var marker = new Tmapv2.Marker({
+                        position: new Tmapv2.LatLng(lat,lon),
+                        icon: imgURL,
+                        map: map
+                    });
+                    // 마커 드래그 설정
+                    marker.tag = tag;
+                    marker.addListener("dragend", function(evt){
+                        markerListenerEvent(evt);
+                    });
+                    
+                     return marker;
+                }
+                
+                
+                // 3. 경유지 심볼 찍기
+                   // addMarker("llPass",126.937068,35.180603,3);
+                    addMarker("llPass",126.930445,35.179519,4);
+                   // addMarker("llPass",126.920424,35.177677,5);
+                    //addMarker("llPass",126.926271,35.177353,6);
+                
+                
+                // 4. 경유지 최적화 API 사용요청
+                var prtcl,arrai;
+                var headers = {}; 
+                headers["appKey"]="l7xx33cc91c829da4cc8a2b881aa60a9b68c";
+                $.ajax({
+                            type:"POST",
+                            headers : headers,
+                            url:"https://apis.openapi.sk.com/tmap/routes?version=1&format=json",//
+                            async:false,
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                      "reqCoordType": "WGS84GEO",
+                                      "resCoordType" : "WGS84GEO",
+                                      "startName": "출발",
+                                      "startX": "126.925123",
+                                      "startY": "35.1808831",
+                                      "startTime": "202011121314",
+                                      "endName": "도착",
+                                      "endX":  "126.9332048",
+                                      "endY": "35.182225",
+                                      "searchOption" : "0",
+                                      "viaPoints": [
+                                        { 
+                                          "viaPointId": "test01",
+                                          "viaPointName": "test01",
+                                          "viaX": "126.937068",
+                                          "viaY":"35.180603",
+                                          "viaTime": 600
+                                        },
+                                        {
+                                          "viaPointId": "test02",
+                                          "viaPointName": "test02",
+                                          "viaX": "126.930445",
+                                          "viaY": "35.179519",
+                                          "viaTime": 600
+                                        },
+                                        {
+                                          "viaPointId": "test03",
+                                          "viaPointName": "test03",
+                                          "viaX": "126.920424",
+                                          "viaY": "35.177677",
+                                          "viaTime": 600
+                                        },
+                                        {
+                                          "viaPointId": "test04",
+                                          "viaPointName": "test04",
+                                          "viaX": "126.926271",
+                                          "viaY": "35.177353",
+                                          "viaTime": 600
+                                        }
+                                      ]
+                            }),
+                            success:function(response){
+                             prtcl = response;
+                             console.log(response);
+                             console.log(response.features[0].geometry.coordinates[0]);
+                             console.log(response.features[1].geometry.coordinates[0][0]);
+                             console.log('------------------------');
+                            // 5. 경유지 최적화 결과 Line 그리기
+                                    //경유지 최적화 결과 POINT 찍기
+                                    /* -------------- Geometry.Point -------------- */
+                                  /*  var style_red = {
+                                            fillColor:"#FF0000",
+                                            fillOpacity:0.2,
+                                            strokeColor: "#FF0000",
+                                            strokeWidth: 3,
+                                            strokeDashstyle: "solid",
+                                            pointRadius: 2,
+                                            title: "this is a red line"
+                                       };*/
+                                    /* -------------- Geometry.Point -------------- */
+                                    //경유지 최적화 결과 Line 그리기
+                                    
+                                        arrai= new Array();
+                                        var k=0;
+                                       function banboksiru(){
+                                           for(var i=0; i<response.features.length ;i++){
+                                               if(i%2==0){continue}else{                                                
+                                                    for(var j=0; j<response.features[i].geometry.coordinates.length;j++){
+                                                        console.log(response.features[i].geometry.coordinates[j]);
+                                                         arrai[k]=new Tmapv2.LatLng(response.features[i].geometry.coordinates[j][1],
+                                                            response.features[i].geometry.coordinates[j][0]);
+                                                            k++;
+                                                        console.log(i,j);                                                        
+                                                    }
+                                                    
+                                                }
+                                            }
+                                                return 0;
+                                           } 
+                                       console.log(2);
+                                       banboksiru();
+                                       console.log(2.2);
+                                       
+                                    var polyline = new Tmapv2.Polyline({
+                                        path:arrai,
+                                        strokeColor: "#dd00dd", // 라인 색상
+                                        strokeWeight: 6, // 라인 두께
+                                        map: map // 지도 객체
+                                    });
+                                  
+                                    var circle = new Tmapv2.Circle({
+                                        center: new Tmapv2.LatLng(35.182080, 126.937749), // 중심좌표
+                                        radius: 300, // 원의 반지름. 크기설정
+                                        strokeColor: "red", // 테두리 색상
+                                        fillColor: "gray", // 원 내부 색상
+                                        map: map // 지도 객체
+                                    });
+                                    var circle = new Tmapv2.Circle({
+                                        center: new Tmapv2.LatLng(35.182080, 126.937749), // 중심좌표
+                                        radius: 10, // 원의 반지름. 크기설정
+                                        strokeColor: "red", // 테두리 색상
+                                        fillColor: "pink", // 원 내부 색상
+                                        map: map // 지도 객체
+                                    });
+
+
+
+                            // 6. 경유지 최적화 결과 반경만큼 지도 레벨 조정
+                            map.zoomToExtent(routeLayer.getDataExtent());
+                            console.log(4);
+                        
+                        },
+                        error:function(request,status,error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                        }
+                    });
+            }
+</script>	
+</head>
+<body onload="initTmap()">
+<div id="map_div">
+</div>        
+</body>
+</html>   
