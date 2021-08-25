@@ -7,7 +7,6 @@
         <script src="https://apis.openapi.sk.com/tmap/js?version=1&format=javascript&appKey=l7xx33cc91c829da4cc8a2b881aa60a9b68c"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
         <script>
-           
             function initTmap(){
                 var map = new Tmapv2.Map("map_div", {
                     center: new Tmapv2.LatLng(35.180883,126.925123),
@@ -16,17 +15,15 @@
                 });
                 map.setZoom(15);
             
-                // 2. ½ÃÀÛ, µµÂø ½Éº¼Âï±â
-            
-                // ½ÃÀÛ
+                // 2. ì‹œì‘, ë„ì°© ì‹¬ë³¼ì°ê¸°
+                // ì‹œì‘
                 addMarker("llStart",126.925123,35.180883,1);
-                // µµÂø
+                // ë„ì°©
                 addMarker("llEnd", 126.933204,35.182225);
                 console.log("pickpick");
                 function addMarker(status, lon, lat, tag) {
-                    //ÃâµµÂø°æÀ¯±¸ºĞ
-                    //ÀÌ¹ÌÁö ÆÄÀÏ º¯°æ.
-                                       
+                    //ì¶œë„ì°©ê²½ìœ êµ¬ë¶„
+                    //ì´ë¯¸ì§€ íŒŒì¼ ë³€ê²½.
                     switch (status) {
                         case "llStart":
                             imgURL = 'http://tmapapis.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
@@ -44,24 +41,16 @@
                         icon: imgURL,
                         map: map
                     });
-                    // ¸¶Ä¿ µå·¡±× ¼³Á¤
+                    // ë§ˆì»¤ ë“œë˜ê·¸ ì„¤ì •
                     marker.tag = tag;
                     marker.addListener("dragend", function(evt){
                         markerListenerEvent(evt);
                     });
-                    
                      return marker;
                 }
-                
-                
-                // 3. °æÀ¯Áö ½Éº¼ Âï±â
-                   // addMarker("llPass",126.937068,35.180603,3);
+                // 3. ê²½ìœ ì§€ ì‹¬ë³¼ ì°ê¸°
                     addMarker("llPass",126.930445,35.179519,4);
-                   // addMarker("llPass",126.920424,35.177677,5);
-                    //addMarker("llPass",126.926271,35.177353,6);
-                
-                
-                // 4. °æÀ¯Áö ÃÖÀûÈ­ API »ç¿ë¿äÃ»
+                // 4. ê²½ìœ ì§€ ìµœì í™” API ì‚¬ìš©ìš”ì²­
                 var prtcl,arrai;
                 var headers = {}; 
                 headers["appKey"]="l7xx33cc91c829da4cc8a2b881aa60a9b68c";
@@ -74,11 +63,11 @@
                             data: JSON.stringify({
                                       "reqCoordType": "WGS84GEO",
                                       "resCoordType" : "WGS84GEO",
-                                      "startName": "Ãâ¹ß",
+                                      "startName": "ì¶œë°œ",
                                       "startX": "126.925123",
                                       "startY": "35.1808831",
                                       "startTime": "202011121314",
-                                      "endName": "µµÂø",
+                                      "endName": "ë„ì°©",
                                       "endX":  "126.9332048",
                                       "endY": "35.182225",
                                       "searchOption" : "0",
@@ -119,8 +108,8 @@
                              console.log(response.features[0].geometry.coordinates[0]);
                              console.log(response.features[1].geometry.coordinates[0][0]);
                              console.log('------------------------');
-                            // 5. °æÀ¯Áö ÃÖÀûÈ­ °á°ú Line ±×¸®±â
-                                    //°æÀ¯Áö ÃÖÀûÈ­ °á°ú POINT Âï±â
+                            // 5. ê²½ìœ ì§€ ìµœì í™” ê²°ê³¼ Line ê·¸ë¦¬ê¸°
+                                    //ê²½ìœ ì§€ ìµœì í™” ê²°ê³¼ POINT ì°ê¸°
                                     /* -------------- Geometry.Point -------------- */
                                   /*  var style_red = {
                                             fillColor:"#FF0000",
@@ -132,8 +121,7 @@
                                             title: "this is a red line"
                                        };*/
                                     /* -------------- Geometry.Point -------------- */
-                                    //°æÀ¯Áö ÃÖÀûÈ­ °á°ú Line ±×¸®±â
-                                    
+                                    //ê²½ìœ ì§€ ìµœì í™” ê²°ê³¼ Line ê·¸ë¦¬ê¸°
                                         arrai= new Array();
                                         var k=0;
                                        function banboksiru(){
@@ -154,35 +142,29 @@
                                        console.log(2);
                                        banboksiru();
                                        console.log(2.2);
-                                       
                                     var polyline = new Tmapv2.Polyline({
                                         path:arrai,
-                                        strokeColor: "#dd00dd", // ¶óÀÎ »ö»ó
-                                        strokeWeight: 6, // ¶óÀÎ µÎ²²
-                                        map: map // Áöµµ °´Ã¼
-                                    });
-                                  
-                                    var circle = new Tmapv2.Circle({
-                                        center: new Tmapv2.LatLng(35.182080, 126.937749), // Áß½ÉÁÂÇ¥
-                                        radius: 300, // ¿øÀÇ ¹İÁö¸§. Å©±â¼³Á¤
-                                        strokeColor: "red", // Å×µÎ¸® »ö»ó
-                                        fillColor: "gray", // ¿ø ³»ºÎ »ö»ó
-                                        map: map // Áöµµ °´Ã¼
+                                        strokeColor: "#dd00dd", // ë¼ì¸ ìƒ‰ìƒ
+                                        strokeWeight: 6, // ë¼ì¸ ë‘ê»˜
+                                        map: map // ì§€ë„ ê°ì²´
                                     });
                                     var circle = new Tmapv2.Circle({
-                                        center: new Tmapv2.LatLng(35.182080, 126.937749), // Áß½ÉÁÂÇ¥
-                                        radius: 10, // ¿øÀÇ ¹İÁö¸§. Å©±â¼³Á¤
-                                        strokeColor: "red", // Å×µÎ¸® »ö»ó
-                                        fillColor: "pink", // ¿ø ³»ºÎ »ö»ó
-                                        map: map // Áöµµ °´Ã¼
+                                        center: new Tmapv2.LatLng(35.182080, 126.937749), // ì¤‘ì‹¬ì¢Œí‘œ
+                                        radius: 300, // ì›ì˜ ë°˜ì§€ë¦„. í¬ê¸°ì„¤ì •
+                                        strokeColor: "red", // í…Œë‘ë¦¬ ìƒ‰ìƒ
+                                        fillColor: "gray", // ì› ë‚´ë¶€ ìƒ‰ìƒ
+                                        map: map // ì§€ë„ ê°ì²´
                                     });
-
-
-
-                            // 6. °æÀ¯Áö ÃÖÀûÈ­ °á°ú ¹İ°æ¸¸Å­ Áöµµ ·¹º§ Á¶Á¤
+                                    var circle = new Tmapv2.Circle({
+                                        center: new Tmapv2.LatLng(35.182080, 126.937749), // ì¤‘ì‹¬ì¢Œí‘œ
+                                        radius: 10, // ì›ì˜ ë°˜ì§€ë¦„. í¬ê¸°ì„¤ì •
+                                        strokeColor: "red", // í…Œë‘ë¦¬ ìƒ‰ìƒ
+                                        fillColor: "pink", // ì› ë‚´ë¶€ ìƒ‰ìƒ
+                                        map: map // ì§€ë„ ê°ì²´
+                                    });
+                            // 6. ê²½ìœ ì§€ ìµœì í™” ê²°ê³¼ ë°˜ê²½ë§Œí¼ ì§€ë„ ë ˆë²¨ ì¡°ì •
                             map.zoomToExtent(routeLayer.getDataExtent());
                             console.log(4);
-                        
                         },
                         error:function(request,status,error){
                             console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
