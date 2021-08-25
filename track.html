@@ -7,24 +7,22 @@
 	src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx33cc91c829da4cc8a2b881aa60a9b68c"></script>
 <script type="text/javascript">
 	var map;
-	// ÆäÀÌÁö°¡ ·ÎµùÀÌ µÈ ÈÄ È£ÃâÇÏ´Â ÇÔ¼öÀÔ´Ï´Ù.
+	// í˜ì´ì§€ê°€ ë¡œë”©ì´ ëœ í›„ í˜¸ì¶œí•˜ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤.
 	function initTmap(){
-		// map »ı¼º
-		// Tmapv2.MapÀ» ÀÌ¿ëÇÏ¿©, Áöµµ°¡ µé¾î°¥ div, ³ĞÀÌ, ³ôÀÌ¸¦ ¼³Á¤ÇÕ´Ï´Ù
+		// map ìƒì„±
+		// Tmapv2.Mapì„ ì´ìš©í•˜ì—¬, ì§€ë„ê°€ ë“¤ì–´ê°ˆ div, ë„“ì´, ë†’ì´ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤
 		map = new Tmapv2.Map("map_div", {
-			center: new Tmapv2.LatLng(35.218745, 129.008938),// Áöµµ ÃÊ±â ÁÂÇ¥
-			width: "100%", // mapÀÇ width ¼³Á¤
-			height: "600px" // mapÀÇ height ¼³Á¤
+			center: new Tmapv2.LatLng(35.218745, 129.008938),// ì§€ë„ ì´ˆê¸° ì¢Œí‘œ
+			width: "100%", // mapì˜ width ì„¤ì •
+			height: "600px" // mapì˜ height ì„¤ì •
 		});
         map.setZoom(16);
-		// Áöµµ °´Ã¼ »ı¼º ÈÄ ¸¶Ä¿¸¦ µî·ÏÇÏ´Â ÇÔ¼ö¸¦ ¼öÇàÇÕ´Ï´Ù.
+		// ì§€ë„ ê°ì²´ ìƒì„± í›„ ë§ˆì»¤ë¥¼ ë“±ë¡í•˜ëŠ” í•¨ìˆ˜ë¥¼ ìˆ˜í–‰í•©ë‹ˆë‹¤.
 		addMarkerAni(Tmapv2.MarkerOptions.ANIMATE_FADEIN);
 	}
-	
-	// ¸¶Ä¿µéÀ» ÀúÀåÇÒ ¹è¿­ÀÔ´Ï´Ù.
+	// ë§ˆì»¤ë“¤ì„ ì €ì¥í•  ë°°ì—´ì…ë‹ˆë‹¤.
 	var markers = [];
-	
-	// ¸¶Ä¿µéÀÇ ÁÂÇ¥¸¦ ÀúÀåÇÒ ¹è¿­ÀÔ´Ï´Ù.
+	// ë§ˆì»¤ë“¤ì˜ ì¢Œí‘œë¥¼ ì €ì¥í•  ë°°ì—´ì…ë‹ˆë‹¤.
 	var coords = [new Tmapv2.LatLng(35.218711, 129.008932),
 		new Tmapv2.LatLng(35.218910, 129.008846),
 		new Tmapv2.LatLng(35.219294, 129.008739),
@@ -33,39 +31,32 @@
         new Tmapv2.LatLng(35.220736, 129.008404),
         new Tmapv2.LatLng(35.221049, 129.008371),
         new Tmapv2.LatLng(35.221306, 129.008458),
-        
 	];
-	
-	// ¸¶Ä¿¸¦ Ãß°¡ÇÏ´Â ÇÔ¼öÀÔ´Ï´Ù.
+	// ë§ˆì»¤ë¥¼ ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤.
 	function addMarkerAni(aniType) {
 		var coordIdx = 0;
-          
-		removeMarkers(); // Áöµµ¿¡ »õ·Î µî·ÏÇÏ±â À§ÇØ ¸ğµç ¸¶Ä¿¸¦ Áö¿ì´Â ÇÔ¼öÀÔ´Ï´Ù.
-          
+		removeMarkers(); // ì§€ë„ì— ìƒˆë¡œ ë“±ë¡í•˜ê¸° ìœ„í•´ ëª¨ë“  ë§ˆì»¤ë¥¼ ì§€ìš°ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤.
 		var func = function() {
-			//Marker °´Ã¼ »ı¼º.
+			//Marker ê°ì²´ ìƒì„±.
 			var marker = new Tmapv2.Marker({
-				position: coords[coordIdx++], //MarkerÀÇ Áß½ÉÁÂÇ¥ ¼³Á¤.
-				draggable: false, //MarkerÀÇ µå·¡±× °¡´É ¿©ºÎ.
-				animation: aniType, //Marker ¾Ö´Ï¸ŞÀÌ¼Ç.
-				animationLength: 700, //¾Ö´Ï¸ŞÀÌ¼Ç ±æÀÌ.
-				label: ' ', //MarkerÀÇ ¶óº§.
-				title: ' ', //Marker Å¸ÀÌÆ².
-				map: map //Marker°¡ Ç¥½ÃµÉ Map ¼³Á¤.
+				position: coords[coordIdx++], //Markerì˜ ì¤‘ì‹¬ì¢Œí‘œ ì„¤ì •.
+				draggable: false, //Markerì˜ ë“œë˜ê·¸ ê°€ëŠ¥ ì—¬ë¶€.
+				animation: aniType, //Marker ì• ë‹ˆë©”ì´ì…˜.
+				animationLength: 700, //ì• ë‹ˆë©”ì´ì…˜ ê¸¸ì´.
+				label: ' ', //Markerì˜ ë¼ë²¨.
+				title: ' ', //Marker íƒ€ì´í‹€.
+				map: map //Markerê°€ í‘œì‹œë  Map ì„¤ì •.
 			});
-            
 			markers.push(marker);
-
 			if (coordIdx < 8) {
-				// ÀÏÁ¤ ½Ã°£ °£°İÀ¸·Î ¸¶Ä¿¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö¸¦ ½ÇÇàÇÕ´Ï´Ù
+				// ì¼ì • ì‹œê°„ ê°„ê²©ìœ¼ë¡œ ë§ˆì»¤ë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜ë¥¼ ì‹¤í–‰í•©ë‹ˆë‹¤
 				setTimeout(func, 1000);
 			}
 		}
-		// ÀÏÁ¤ ½Ã°£ °£°İÀ¸·Î ¸¶Ä¿¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö¸¦ ½ÇÇàÇÕ´Ï´Ù
+		// ì¼ì • ì‹œê°„ ê°„ê²©ìœ¼ë¡œ ë§ˆì»¤ë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜ë¥¼ ì‹¤í–‰í•©ë‹ˆë‹¤
 		setTimeout(func, 1000);
 	}
-
-	// ¸ğµç ¸¶Ä¿¸¦ Á¦°ÅÇÏ´Â ÇÔ¼öÀÔ´Ï´Ù.
+	// ëª¨ë“  ë§ˆì»¤ë¥¼ ì œê±°í•˜ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤.
 	function removeMarkers() {
 		for (var i = 0; i < markers.length; i++) {
 			markers[i].setMap(null);
@@ -81,10 +72,9 @@ console.log(
 35.220736, 129.008404,'20:54',
 35.221306, 129.008458,'21:4',
 35.220393, 129.008462 ,'21:14');
-
 </script>
 </head>
-<body onload="initTmap()"><!-- ¸Ê »ı¼º ½ÇÇà -->
+<body onload="initTmap()"><!-- ë§µ ìƒì„± ì‹¤í–‰ -->
 	<div id="map_div"></div>
 </body>
 </html>
